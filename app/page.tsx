@@ -1,14 +1,13 @@
-import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       <h1 className="text-4xl font-bold">Job Board</h1>
       <p>Find your dream job</p>
-      <div className="flex flex-col items-center justify-center">
-        <input type="text" placeholder="Search for a job" />
-        <button>Search</button>
-      </div>
+      <Link className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" href="/jobs">
+        Browse Jobs
+      </Link>
     </div>
   );
 }
