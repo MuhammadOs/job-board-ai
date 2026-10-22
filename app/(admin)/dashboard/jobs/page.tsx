@@ -1,6 +1,5 @@
 import Link from "next/link";
-
-const jobIds = [1, 2, 3];
+import { JOBS } from "@/lib/jobs";
 
 function JobsManagementPage() {
   return (
@@ -9,9 +8,9 @@ function JobsManagementPage() {
       <Link href="/dashboard/jobs/new" className="mt-4 text-blue-500 hover:underline">
         Create New Job
       </Link>
-      {jobIds.map((jobId) => (
-        <Link key={jobId} href={`/dashboard/jobs/${jobId}`} className="mt-4 text-blue-500 hover:underline">
-          Job {jobId}
+      {JOBS.map((job) => (
+        <Link key={job.id} href={`/dashboard/jobs/${job.id}`} className="mt-4 text-blue-500 hover:underline">
+          {job.id} — {job.title}
         </Link>
       ))}
     </div>

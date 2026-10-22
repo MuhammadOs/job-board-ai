@@ -1,19 +1,28 @@
+import { notFound } from "next/navigation";
+import { JOBS, salary } from "@/lib/jobs";
+
 type props = {
   params: Promise<{ id: string }>;
 };
 
 async function JobDetailsPage({ params }: props) {
   const { id } = await params;
-  console.log(id);
+  const job = JOBS.find((j) => j.id === id);
+  if (!job) notFound();
+
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-        <h1 className="text-center text-4xl font-bold mb-2">Job Details</h1>
-        <div className="flex flex-col items-center *:mt-4 border p-4 rounded">
-        <h2 className="text-center text-2xl font-bold">Frontend Developer</h2>
-        <p className="text-center text-gray-500">Remote Position</p>
-        <p className="text-center">We are looking for a skilled frontend developer with experience in React and TypeScript to join our team.</p>
-      </div>
-      </div>
+    <div className="mx-auto flex max-w-3xl flex-col gap-4 p-4 md:p-6">
+      <p className="font-mono text-xs font-bold">{"// "}{job.id} · {job.posted}</p>
+      <h1 className="text-4xl font-black tracking-tighter">{job.title}</h1>
+      <p className="font-mono text-sm">
+        {job.company} — {job.location}{job.remote && " / REMOTE"} · {job.type}
+      </p>
+      <div className="brut-3 w-fit bg-primary px-3 py-2 font-mono text-2xl font-black">{salary(job)}</div>
+      <p>{job.summary}</p>
+      <ul className="list-inside list-disc">
+        {job.requirements.map((r) => <li key={r}>{r}</li>)}
+      </ul>
+    </div>
   );
 }
 export default JobDetailsPage;

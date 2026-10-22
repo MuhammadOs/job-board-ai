@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
@@ -37,11 +38,11 @@ export function Logo({ text, className }: { text: string; className?: string }) 
 
 export function ViewToggle() {
   const pathname = usePathname() ?? "/";
-  const admin = pathname.startsWith("/admin");
+  const admin = pathname.startsWith("/dashboard");
   return (
     <div className="brut flex bg-card font-mono text-xs font-bold shadow-hard">
-      <a href="/" className={cn("px-3 py-2", !admin && "bg-primary")}>CANDIDATE</a>
-      <a href="/admin" className={cn("border-l-2 px-3 py-2", admin && "bg-secondary text-secondary-foreground")}>ADMIN</a>
+      <Link href="/" className={cn("px-3 py-2", !admin && "bg-primary")}>Dashboard</Link>
+      <Link href="/dashboard" className={cn("border-l-2 px-3 py-2", admin && "bg-secondary text-secondary-foreground")}>ADMIN</Link>
     </div>
   );
 }
@@ -49,7 +50,7 @@ export function ViewToggle() {
 export function TopBar({ children }: { children?: ReactNode }) {
   return (
     <header className="sticky top-0 z-30 flex items-center justify-between gap-4 border-b-3 border-b-[3px] bg-background px-4 py-3 md:px-6">
-      <a href="/" className="text-2xl font-black tracking-tighter">RAWJOBS<span className="bg-primary px-1">_</span></a>
+      <Link href="/" className="text-2xl font-black tracking-tighter">RAWJOBS<span className="bg-primary px-1">_</span></Link>
       <div className="flex items-center gap-3">{children}<ViewToggle /></div>
     </header>
   );

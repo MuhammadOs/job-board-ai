@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
+import { JOBS } from "@/lib/jobs";
 
 type props = {
     params: Promise<{ jobId: string }>;
@@ -6,7 +8,7 @@ type props = {
 
 async function EditJobPage({ params }: props) {
     const { jobId } = await params;
-    console.log("Editing Job ID: ", jobId);
+    if (!JOBS.some((j) => j.id === jobId)) notFound();
     return (
         <div>
             <h1>Edit Job Page</h1>

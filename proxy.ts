@@ -1,27 +1,35 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-// This function can be marked `async` if using `await` inside
-export function proxy(request: NextRequest) {
-  const host = (request.headers.get('host') ?? "").toLowerCase();
-  const url = request.nextUrl;
-  const pathname = url.pathname;
-  console.log("Host: ",host);
-  console.log("Pathname: ",pathname);
+const ADMIN_HOST = "admin.wazifa.app";
+const MAIN_HOST = "wazifa.app";
 
-  const isAdminHost = host.includes("admin.wazifa.app");
-  if(isAdminHost) {
-    return NextResponse.redirect(new URL('/dashboard', request.url));
+const isDashboardPath = (pathname: string) =>
+  pathname === "/dashboard" || pathname.startsWith("/dashboard/");
+
+export function proxy(request: NextRequest) {
+  // Strip the port (e.g. "admin.wazifa.app:3000") so host comparisons are exact
+  const hostname = (request.headers.get('host') ?? "").toLowerCase().split(":")[0];
+  const { pathname } = request.nextUrl;
+
+  // Admin subdomain only serves the dashboard. Only redirect paths outside it,
+  // otherwise /dashboard would redirect to itself forever.
+  if (hostname === ADMIN_HOST) {
+    if (!isDashboardPath(pathname)) {
+      return NextResponse.redirect(new URL('/dashboard', request.url));
+    }
+    return NextResponse.next();
   }
-  const isMainDomain = host.includes("wazifa.app");
-  if(isMainDomain && pathname.includes("/dashboard")) {
+
+  // Main domain (and www) must not expose the dashboard
+  const isMainDomain = hostname === MAIN_HOST || hostname === `www.${MAIN_HOST}`;
+  if (isMainDomain && isDashboardPath(pathname)) {
     return NextResponse.redirect(new URL('/', request.url));
   }
+
+  return NextResponse.next();
 }
 
-// Alternatively, you can use a default export:
-// export default function proxy(request: NextRequest) { ... }
-
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 }

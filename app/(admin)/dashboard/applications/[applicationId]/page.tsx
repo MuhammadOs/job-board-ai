@@ -6,7 +6,6 @@ type props = {
 
 async function ApplicationDetailsPage({ params }: props) {
     const { applicationId } = await params;
-    console.log("Application ID: ", applicationId);
     return (
         <div>
             <h1>Job Application Details Page</h1>
