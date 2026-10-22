@@ -7,7 +7,7 @@ const navigationLinks = [
 
 function DashboardPage() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center py-2">
+    <div className="flex flex-col items-start gap-2">
       <h1 className="text-4xl font-bold">Admin Dashboard</h1>
       {navigationLinks.map(({ href, label }) => (
         <Link key={href} href={href} className="mt-4 text-blue-500 hover:underline">
